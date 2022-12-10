@@ -1,0 +1,8 @@
+title 0.6: New note
+
+note over browser:
+user fills and submits the form
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: JSON response
