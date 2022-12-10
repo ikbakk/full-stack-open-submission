@@ -7,6 +7,10 @@ end note
 browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
 server-->browser: Redirect https://studies.cs.helsinki.fi/exampleapp/notes
 
+note left of browser:
+page refresh and new data shown
+end note
+
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 server-->browser: HTML document
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
