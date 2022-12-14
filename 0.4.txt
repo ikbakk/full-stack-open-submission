@@ -1,0 +1,22 @@
+title 0.4
+
+note over browser:
+user fills and submits the form
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+server-->browser: Redirect https://studies.cs.helsinki.fi/exampleapp/notes
+
+note left of browser:
+page refresh and new data shown
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML document
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{content: "a", date: "2022-12-10T23:21:18.584Z"}, ..
