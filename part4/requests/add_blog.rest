@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI1ZWIyZTBkYmNiMWRlZjNkMDg4MWYyMDMiLCJpYXQiOjE1ODg3ODUzNDV9.r5mxl-ndzxd_y2mH2Ys-oH5ypAQ8N26dWeDnJ5Med8M
+
+{
+    "title": "Full Stack Open 2020",
+    "author": "Au Thori",
+    "url": "www.google.fi",
+    "likes": "2020"
+}
