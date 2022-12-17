@@ -8,8 +8,15 @@ blogsRouter.get('/', (request, response) => {
 })
 
 blogsRouter.post('/', (request, response) => {
-  if (!request.body['url'] && !request.body['title']) {
-    response.status(400)
+  if (request.body.title === undefined) {
+    response.status(400).json('title not found')
+  } else if (request.body.url === undefined) {
+    response.status(400).json('url not found')
+  } else {
+    const blog = new Blog(request.body)
+    blog.save().then((result) => {
+      response.status(201).json(result)
+    })
   }
   const blog = new Blog(request.body)
 
