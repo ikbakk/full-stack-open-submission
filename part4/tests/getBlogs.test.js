@@ -2,8 +2,9 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+require('express-async-errors')
 
-const Blog = require('../models/blog')
+const Blog = require('../models/blogs')
 const helper = require('./test_helper')
 
 beforeEach(async () => {
