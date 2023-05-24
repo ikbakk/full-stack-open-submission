@@ -1,31 +1,60 @@
-const bcrypt = require('bcryptjs')
-const usersRouter = require('express').Router()
-const User = require('../models/user')
+const bcrypt = require('bcryptjs');
+const usersRouter = require('express').Router();
+const User = require('../models/user');
 
 usersRouter.get('/', async (request, response) => {
-  const users = await User.find({}).populate('blogs')
-  response.json(users.map((u) => u.toJSON()))
-})
+  const users = await User.find({}).populate('blogs', {
+    title: 1,
+    author: 1,
+    url: 1
+  });
+  response.json(users);
+});
+
+usersRouter.get('/:id', async (request, response) => {
+  const user = await User.findById(request.params.id);
+
+  if (user) {
+    response.json(user.toJSON());
+  } else {
+    response.status(404).end();
+  }
+});
 
 usersRouter.post('/', async (request, response) => {
-  const body = request.body
+  const { username, name, password } = request.body;
 
-  if (body.password.length < 3) {
-    response.status(400).json('password is less than 3 character')
-  } else {
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(body.password, saltRounds)
-
-    const user = new User({
-      username: body.username,
-      name: body.name,
-      passwordHash
-    })
-
-    const savedUser = await user.save()
-
-    response.json(savedUser)
+  if (!(username && password)) {
+    return response.status(400).json({
+      error: 'Username and Password are required'
+    });
   }
-})
 
-module.exports = usersRouter
+  if (username.length < 3 || password.length < 3) {
+    return response.status(400).json({
+      error: 'Username and Password must be at least 3 characters long'
+    });
+  }
+
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return response.status(400).json({
+      error: 'Username must be unique'
+    });
+  }
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+
+  const user = new User({
+    username,
+    name,
+    passwordHash
+  });
+
+  const savedUser = await user.save();
+
+  response.status(201).json(savedUser);
+});
+
+module.exports = usersRouter;

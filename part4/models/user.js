@@ -1,30 +1,30 @@
-const mongoose = require('mongoose')
-const supertest = require('supertest')
-const app = require('../app')
-const api = supertest(app)
+const mongoose = require('mongoose');
 
-describe('user administration', () => {
-  test('check that invalid users are not created, password is less than 3', async () => {
-    const newUser = {
-      username: 'qwert',
-      name: 'hector',
-      password: '1j'
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  name: String,
+  passwordHash: String,
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog'
     }
+  ]
+});
 
-    await api.post('/api/users').send(newUser).expect(400)
-  })
+userSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.passwordHash;
+  }
+});
 
-  test('check that invalid users are not created, duplicate users', async () => {
-    const newUser = {
-      username: 'nisko',
-      name: 'hector',
-      password: '12j'
-    }
+const User = mongoose.model('User', userSchema);
 
-    await api.post('/api/users').send(newUser).expect(400)
-  })
-})
-
-afterAll(() => {
-  mongoose.connection.close()
-})
+module.exports = User;
