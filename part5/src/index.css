@@ -28,12 +28,15 @@
 .active-user {
   font-weight: bold;
 }
-table {
-  margin-top: 25px;
+
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-table,
-th,
-td {
-  border: 1px solid gray;
-  border-collapse: collapse;
+
+.blog-btn {
+  padding: 10px 4px;
+  border: 1px solid black;
+  border-radius: 4px;
 }

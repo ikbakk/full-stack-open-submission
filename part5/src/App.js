@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import Blogs from './components/Blog';
+import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notif';
 import blogService from './services/blogs';
@@ -81,7 +81,11 @@ const App = () => {
           <Toggle ref={blogFormRef}>
             <BlogForm createBlog={createBlog} />
           </Toggle>
-          <Blogs blogs={blogs} />
+          <div className='blog-list'>
+            {blogs?.map(blog => (
+              <Blog key={blog.id} blog={blog} />
+            ))}
+          </div>
         </div>
       )}
     </div>

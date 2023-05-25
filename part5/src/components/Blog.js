@@ -1,18 +1,31 @@
-const Blogs = ({ blogs }) => (
-  <table>
-    <tbody>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-      </tr>
-      {blogs.map(blog => (
-        <tr key={blog.id}>
-          <td>{blog.title}</td>
-          <td>{blog.author}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
+import { useState } from 'react';
 
-export default Blogs;
+const Blog = ({ blog }) => {
+  const [visible, setVisible] = useState(false);
+
+  const toggleVisibility = () => {
+    setVisible(!visible);
+  };
+
+  return (
+    <div className='blog-btn'>
+      <div>
+        <h2>
+          {blog.title}
+          <button onClick={toggleVisibility}>
+            {visible ? 'Hide' : 'Show'}
+          </button>
+        </h2>
+        {visible && (
+          <div>
+            <h3>{blog.author}</h3>
+            <p>{blog.url}</p>
+            <p>likes: {blog.likes}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Blog;
