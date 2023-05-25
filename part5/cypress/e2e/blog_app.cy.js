@@ -54,4 +54,18 @@ describe('Blog app', () => {
       cy.contains('Cypress make this');
     });
   });
+
+  describe('Authorized user action', function () {
+    beforeEach(function () {
+      cy.login(loginCredential);
+    });
+
+    it('like pressed', function () {
+      cy.contains('Cypress make this')
+        .parent()
+        .find('.visibility-button')
+        .click();
+      cy.get('.like-btn').click();
+    });
+  });
 });
