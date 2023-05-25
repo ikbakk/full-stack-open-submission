@@ -58,6 +58,11 @@ describe('Blog app', () => {
   describe('Authorized user action', function () {
     beforeEach(function () {
       cy.login(loginCredential);
+      cy.createBlog({
+        title: 'Cypress make this',
+        author: 'Cypress',
+        url: 'www.cypress.io'
+      });
     });
 
     it('like pressed', function () {
@@ -66,6 +71,15 @@ describe('Blog app', () => {
         .find('.visibility-button')
         .click();
       cy.get('.like-btn').click();
+    });
+
+    it('delete blog', function () {
+      cy.contains('Cypress make this')
+        .parent()
+        .find('.visibility-button')
+        .click();
+      cy.wait(1000);
+      cy.get('.delete-btn').should('exist').click();
     });
   });
 });
