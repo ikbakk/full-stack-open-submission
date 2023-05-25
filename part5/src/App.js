@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm';
 import Notification from './components/Notif';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import BlogForm from './components/BlogForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -34,11 +35,13 @@ const App = () => {
 
   const handleLogin = async (username, password) => {
     try {
+      console.log('fetch');
       const user = await loginService.login({
         username,
         password
       });
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
+      blogService.setToken(user.token);
       setUser(user);
     } catch (exception) {
       setErrorMessage('Wrong Credentials');
@@ -48,6 +51,15 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null);
+  };
+
+  const createBlog = async (title, author, url) => {
+    try {
+      const blog = await blogService.create({ title, author, url }, user.token);
+      setBlogs(blogs.concat(blog));
+    } catch (exception) {
+      setErrorMessage(exception.message);
+    }
   };
 
   return (
@@ -62,6 +74,7 @@ const App = () => {
             <span className='active-user'>{user.name}</span> logged in
             <button onClick={handleLogout}>Logout</button>
           </p>
+          <BlogForm createBlog={createBlog} />
           <Blogs blogs={blogs} />
         </div>
       )}

@@ -23,7 +23,10 @@
   font-weight: bold;
 }
 
-table,
+table {
+  margin-top: 25px;
+}
+,
 th,
 td {
   border: 1px solid black;
