@@ -1,28 +1,23 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
+import { fireEvent, render, renderEvent } from '@testing-library/react';
 import Blog from './Blog';
 
 describe('<Blog />', () => {
   let component;
-  const updateLikes = jest.fn();
-  const deleteBlog = jest.fn();
   const blog = {
     title: 'Title',
     author: 'Author',
     url: 'https://www.test.com/',
-    likes: 0
+    likes: 0,
+    user: {
+      username: 'usertest',
+      name: 'nametest'
+    }
   };
 
   beforeEach(() => {
-    component = render(
-      <Blog
-        key={blog.id}
-        blog={blog}
-        updateLikes={updateLikes}
-        deleteBlog={deleteBlog}
-      />
-    );
+    component = render(<Blog key={blog.id} blog={blog} />);
   });
 
   test('renders title and author but not url or likes by default', () => {
@@ -40,5 +35,13 @@ describe('<Blog />', () => {
     const details = component.container.querySelector('.blog-details');
 
     expect(details).toEqual(null);
+  });
+
+  test('renders blog details when button is clicked', () => {
+    const button = component.container.querySelector('.visibility-button');
+    fireEvent.click(button);
+
+    const blogDetails = component.container.querySelector('.blog-details');
+    expect(blogDetails).toBeInTheDocument();
   });
 });
