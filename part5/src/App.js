@@ -76,6 +76,18 @@ const App = () => {
     }
   };
 
+  const deleteBlog = async id => {
+    try {
+      await blogService.remove(id);
+
+      const updatedBlogs = blogs.filter(blog_ => blog_.id !== id);
+      setBlogs(updatedBlogs);
+      setMessage('Blog deleted successfully');
+    } catch (exception) {
+      setMessage(`Error: ${exception.response.data.error}`);
+    }
+  };
+
   return (
     <div>
       <h1 className='title'>Blogs</h1>
@@ -95,7 +107,12 @@ const App = () => {
             {blogs
               ?.sort((a, b) => b.likes - a.likes)
               .map(blog => (
-                <Blog key={blog.id} blog={blog} likeUpdate={likeUpdate} />
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  likeUpdate={likeUpdate}
+                  blogDelete={deleteBlog}
+                />
               ))}
           </div>
         </div>
