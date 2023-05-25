@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blogs from './components/Blog';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notif';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import BlogForm from './components/BlogForm';
+import Toggle from './components/FormToggle';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
+
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs));
@@ -55,6 +58,7 @@ const App = () => {
 
   const createBlog = async (title, author, url) => {
     try {
+      blogFormRef.current.toggleVisibility();
       const blog = await blogService.create({ title, author, url }, user.token);
       setBlogs(blogs.concat(blog));
     } catch (exception) {
@@ -74,7 +78,9 @@ const App = () => {
             <span className='active-user'>{user.name}</span> logged in
             <button onClick={handleLogout}>Logout</button>
           </p>
-          <BlogForm createBlog={createBlog} />
+          <Toggle ref={blogFormRef}>
+            <BlogForm createBlog={createBlog} />
+          </Toggle>
           <Blogs blogs={blogs} />
         </div>
       )}
