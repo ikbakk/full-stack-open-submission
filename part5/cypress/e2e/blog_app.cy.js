@@ -1,12 +1,18 @@
+const createCredential = {
+  username: 'iqbalfirdaus',
+  password: 'password',
+  name: 'Iqbal Firdaus'
+};
+
+const loginCredential = {
+  username: 'iqbalfirdaus',
+  password: 'password'
+};
+
 describe('Blog app', () => {
-  const config = {
-    username: 'iqbalfirdaus',
-    password: 'password',
-    name: 'Iqbal Firdaus'
-  };
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset');
-    cy.request('POST', 'http://localhost:3001/api/users/', config);
+    cy.request('POST', 'http://localhost:3001/api/users/', createCredential);
     cy.visit('http://localhost:3000');
   });
 
@@ -30,6 +36,22 @@ describe('Blog app', () => {
       cy.get('#error-notification').should('have.text', 'Wrong Credentials');
 
       cy.get('html').should('not.contain', 'Iqbal Firdaus logged in');
+    });
+  });
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login(loginCredential);
+    });
+
+    it('A blog can be created', function () {
+      cy.createBlog({
+        title: 'Cypress make this',
+        author: 'Cypress',
+        url: 'www.cypress.io'
+      });
+
+      cy.contains('Cypress make this');
     });
   });
 });
