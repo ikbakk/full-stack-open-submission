@@ -8,8 +8,8 @@ import BlogForm from './components/BlogForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs));
@@ -17,12 +17,12 @@ const App = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setErrorMessage(null);
+      setMessage(null);
     }, 5000);
     return () => {
       clearTimeout(timer);
     };
-  }, [errorMessage]);
+  }, [message]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -44,7 +44,7 @@ const App = () => {
       blogService.setToken(user.token);
       setUser(user);
     } catch (exception) {
-      setErrorMessage('Wrong Credentials');
+      setMessage('Error: Wrong Credentials');
     }
   };
 
@@ -58,14 +58,14 @@ const App = () => {
       const blog = await blogService.create({ title, author, url }, user.token);
       setBlogs(blogs.concat(blog));
     } catch (exception) {
-      setErrorMessage(exception.message);
+      setMessage('Error: All fields must be filled to add a new blog');
     }
   };
 
   return (
     <div>
       <h1 className='title'>Blogs</h1>
-      <Notification message={errorMessage} />
+      <Notification message={message} />
       {user === null ? (
         <LoginForm handleLogin={handleLogin} />
       ) : (

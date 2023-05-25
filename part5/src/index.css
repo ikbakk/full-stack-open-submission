@@ -1,16 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Cantarell&family=Roboto+Slab&display=swap');
-
 * {
   font-family: 'Roboto Slab', 'Cantarell', serif;
 }
-
 .title {
   color: green;
   font-weight: bold;
 }
 
-.error {
-  color: red;
+.error,
+.success {
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
@@ -19,16 +17,23 @@
   margin-bottom: 10px;
 }
 
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
 .active-user {
   font-weight: bold;
 }
-
 table {
   margin-top: 25px;
 }
-,
+table,
 th,
 td {
-  border: 1px solid black;
+  border: 1px solid gray;
   border-collapse: collapse;
 }
