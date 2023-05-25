@@ -28,7 +28,7 @@ const LoginForm = ({ handleLogin }) => {
           <label htmlFor='password'>Password</label>
           <input
             type='text'
-            value={username}
+            value={password}
             name='password'
             onChange={({ target }) => setPassword(target.value)}
           />

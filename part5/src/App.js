@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import Blogs from './components/Blogs';
+import Blogs from './components/Blog';
 import LoginForm from './components/LoginForm';
-import Notification from './components/Notification';
+import Notification from './components/Notif';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -23,16 +23,31 @@ const App = () => {
     };
   }, [errorMessage]);
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
         username,
         password
       });
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
       setUser(user);
     } catch (exception) {
       setErrorMessage('Wrong Credentials');
     }
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogappUser');
+    setUser(null);
   };
 
   return (
@@ -45,6 +60,7 @@ const App = () => {
         <div>
           <p>
             <span className='active-user'>{user.name}</span> logged in
+            <button onClick={handleLogout}>Logout</button>
           </p>
           <Blogs blogs={blogs} />
         </div>
