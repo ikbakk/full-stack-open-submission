@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { createNewAnecdote } from '../utils/request';
+import useNotification from '../hooks/useNotification';
 
 const AnecdoteForm = () => {
+  const { showNotif } = useNotification();
   const queryClient = useQueryClient();
   const newAnecdoteMutation = useMutation(createNewAnecdote, {
     // onSuccess: newAnecdoteMutation => {
@@ -15,9 +17,14 @@ const AnecdoteForm = () => {
 
   const onCreate = event => {
     event.preventDefault();
-    const content = event.target.anecdote.value;
-    newAnecdoteMutation.mutate(content);
-    event.target.anecdote.value = '';
+    if (event.target.anecdote.value.length < 5) {
+      showNotif('Anecdote must be at least 5 characters long');
+    } else {
+      const content = event.target.anecdote.value;
+      newAnecdoteMutation.mutate(content);
+      showNotif('Anecdote created!');
+      event.target.anecdote.value = '';
+    }
   };
 
   return (

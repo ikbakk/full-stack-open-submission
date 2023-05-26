@@ -22,6 +22,11 @@ export const createNewAnecdote = async content => {
       votes: 0,
       id: getId()
     });
+
+    if (content.length < 5) {
+      throw new Error('Anecdote must be at least 5 characters long');
+    }
+
     return res.data;
   } catch (err) {
     return console.log(err);

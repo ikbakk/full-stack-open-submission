@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAnecdotes, updateVote } from '../utils/request';
+import useNotification from '../hooks/useNotification';
 
 const AnecdoteList = () => {
+  const { showNotif } = useNotification();
   const updateVoteMutation = useMutation(updateVote);
   const queryClient = useQueryClient();
   const { data: anecdotes, isLoading } = useQuery('anecdotes', getAnecdotes, {
@@ -12,6 +14,7 @@ const AnecdoteList = () => {
 
   const voteHandle = anecdote => {
     updateVoteMutation.mutate(anecdote);
+    showNotif(`you voted '${anecdote.content}'`);
   };
 
   return (
