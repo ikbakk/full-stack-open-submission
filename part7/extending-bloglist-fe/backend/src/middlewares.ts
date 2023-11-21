@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-
-import ErrorResponse from './interfaces/ErrorResponse';
+import jwt from 'jsonwebtoken';
+import { CustomRequest, ErrorResponse } from '@/interfaces/Middlewares';
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
   res.status(404);
@@ -16,4 +16,26 @@ export function errorHandler(err: Error, req: Request, res: Response<ErrorRespon
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
   });
+}
+
+export function tokenExtractor(req: CustomRequest, res: Response, next: NextFunction) {
+  const authorization = req.get('authorization');
+  if (authorization && authorization.startsWith('Bearer ')) {
+    req.token = authorization.replace('Bearer', '');
+  }
+  next();
+}
+
+export async function userExtractor(req: CustomRequest, res: Response, next: NextFunction) {
+  if (!req.token) {
+    req.user = null;
+  } else {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET!);
+    if (!decodedToken.id) {
+      req.user = null;
+    } else {
+      req.user = await UserActivation.findBydID(decodedToken.id);
+    }
+  }
+  next();
 }
