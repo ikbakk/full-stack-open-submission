@@ -6,5 +6,5 @@ export default interface User extends Document {
   username: string;
   name: string;
   passwordHash: string;
-  blogs: Types.ObjectId[] | Blog[];
+  blogs: (Types.ObjectId | Blog)[];
 }

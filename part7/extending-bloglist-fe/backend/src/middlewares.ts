@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import { CustomRequest, ErrorResponse } from '@/interfaces/Middlewares';
+// import { User } from './models';
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
   res.status(404);
@@ -26,16 +27,17 @@ export function tokenExtractor(req: CustomRequest, res: Response, next: NextFunc
   next();
 }
 
-export async function userExtractor(req: CustomRequest, res: Response, next: NextFunction) {
-  if (!req.token) {
-    req.user = null;
-  } else {
-    const decodedToken = jwt.verify(req.token, process.env.SECRET!);
-    if (!decodedToken.id) {
-      req.user = null;
-    } else {
-      req.user = await UserActivation.findBydID(decodedToken.id);
-    }
-  }
-  next();
-}
+// export async function userExtractor(req: CustomRequest, res: Response, next: NextFunction) {
+//   if (!req.token) {
+//     req.user = null;
+//   } else {
+//     const decodedToken = jwt.verify(req.token, process.env.SECRET!);
+//     if (!decodedToken) {
+//       req.user = null;
+//     } else {
+//       console.log(decodedToken);
+//       // req.user = await User.findById(decodedToken);
+//     }
+//   }
+//   next();
+// }

@@ -59,7 +59,7 @@ blogsRouter.delete('/:id', async (req: CustomRequest, res: Response) => {
     });
   }
 
-  if (blog?.user.toString() === req.user.id) {
+  if (blog?.user.toString() === req?.user?.id) {
     await Blog.findByIdAndRemove(req.params.id);
     return res.status(204).end();
   } else {
