@@ -16,7 +16,7 @@ This course teaches JavaScript, React, Redux, Node.js, MongoDB, GraphQL, CSS and
 - [x] Part 5 - Testing React apps (Jest + Cypress)
 - [x] Part 5 - Testing React apps (Jest + Cypress)
 - [x] Part 6 - Advanced State management
-- [ ] Extra part 7 - React router, custom hooks, styling app with CSS and webpack
+- [x] Extra part 7 - React router, custom hooks, styling app with CSS and webpack
 - [ ] Additional parts
 
 ## Other repositories
