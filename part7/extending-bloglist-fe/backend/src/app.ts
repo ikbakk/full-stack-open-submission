@@ -33,6 +33,8 @@ app.get<{}, MessageResponse>('/', (req, res) => {
   });
 });
 
+app.use(middlewares.tokenExtractor);
+app.use(middlewares.userExtractor);
 app.use('/api/v1', api);
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);

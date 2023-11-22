@@ -21,6 +21,7 @@ blogsRouter.get('/:id', async (req: Request, res: Response) => {
 blogsRouter.post('/', async (req: CustomRequest, res: Response) => {
   const { title, author, url, likes } = req.body;
   const user = req.user;
+  console.log(user);
 
   if (!user) {
     return res.status(401).json({

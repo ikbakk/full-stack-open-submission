@@ -1,7 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { CustomRequest, ErrorResponse } from '@/interfaces/Middlewares';
+import { User } from './models';
 // import { User } from './models';
+
+interface JwtPayload {
+  username: string;
+  id: string;
+  iat: number;
+}
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
   res.status(404);
@@ -22,22 +29,21 @@ export function errorHandler(err: Error, req: Request, res: Response<ErrorRespon
 export function tokenExtractor(req: CustomRequest, res: Response, next: NextFunction) {
   const authorization = req.get('authorization');
   if (authorization && authorization.startsWith('Bearer ')) {
-    req.token = authorization.replace('Bearer', '');
+    req.token = authorization.replace('Bearer', '').trim();
   }
   next();
 }
 
-// export async function userExtractor(req: CustomRequest, res: Response, next: NextFunction) {
-//   if (!req.token) {
-//     req.user = null;
-//   } else {
-//     const decodedToken = jwt.verify(req.token, process.env.SECRET!);
-//     if (!decodedToken) {
-//       req.user = null;
-//     } else {
-//       console.log(decodedToken);
-//       // req.user = await User.findById(decodedToken);
-//     }
-//   }
-//   next();
-// }
+export async function userExtractor(req: CustomRequest, res: Response, next: NextFunction) {
+  if (!req.token) {
+    req.user = null;
+  } else {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET!) as JwtPayload;
+    if (!decodedToken) {
+      req.user = null;
+    } else {
+      req.user = await User.findById(decodedToken.id);
+    }
+  }
+  next();
+}
